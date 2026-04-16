@@ -31,12 +31,12 @@ class MyPlugin(Star):
         """可选择实现异步的插件销毁方法，当插件被卸载/停用时会调用。"""
 
 def is_created_today(path: str) -> bool:
-    """判断文件是否是今天创建的"""
     file_path = Path(path)
+    # 文件不存在直接返回False
     if not file_path.exists():
         return False
     
-    ctime_timestamp = file_path.stat().st_birthtime 
+    ctime_timestamp = file_path.stat().st_ctime
     created_date = datetime.fromtimestamp(ctime_timestamp).date()
     return created_date == date.today()
 
