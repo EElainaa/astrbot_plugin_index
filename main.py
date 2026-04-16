@@ -188,11 +188,11 @@ def _char_glow_layer(width, height, chars_pos, color, font, blur_radius):
 
 
 def create_instruction(username, output="instruction.png",
-                         width=900, font_size=32, header_img_path="logo.png"):
+                         width=900, font_size=32, header_img_path="data/plugins/astrbot_plugin_instruction/logo.png"):
     content = get_content()
     full_text = f"致{username}：{content}"
 
-    font = ImageFont.truetype('./LXGWWenKai-Regular.ttf', font_size)
+    font = ImageFont.truetype('data/plugins/astrbot_plugin_instruction/LXGWWenKai-Regular.ttf', font_size)
     pad_x, pad_x_top = 40, 40
     max_w = width - 2 * pad_x
 
