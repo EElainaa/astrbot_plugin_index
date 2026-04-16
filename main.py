@@ -47,7 +47,7 @@ def is_created_today(path: str) -> bool:
     if not file_path.exists():
         return False
     
-    ctime_timestamp = file_path.stat().st_birthtime 
+    ctime_timestamp = file_path.stat().st_ctime
     created_date = datetime.fromtimestamp(ctime_timestamp).date()
     return created_date == date.today()
 
