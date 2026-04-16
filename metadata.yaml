@@ -1,4 +1,4 @@
-name: astrbot_plugin_instruction
+name: astrbot_plugin_index
 display_name: 指令之意
 desc: 获取每日的指令
 version: v1.0

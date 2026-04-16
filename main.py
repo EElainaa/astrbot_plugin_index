@@ -1,5 +1,5 @@
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
-from astrbot.api.star import Context, Star, register
+from astrbot.api.star import Context,StarTools, Star, register
 from astrbot.api import logger
 from pathlib import Path
 from datetime import datetime, date
@@ -11,6 +11,17 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 class MyPlugin(Star):
     def __init__(self, context: Context):
         super().__init__(context)
+        
+        # 初始化路径
+        self.plugin_dir = Path(__file__).parent
+        self.plugin_data_dir = StarTools.get_data_dir("astrbot_plugin_index")
+        self.res_dir = self.plugin_dir / "resource"
+        self.font_dir = self.res_dir / "font"
+        self.image_dir = self.plugin_data_dir / "image"
+        
+        # 创建必要目录（自动创建font文件夹）
+        self.plugin_data_dir.mkdir(parents=True, exist_ok=True)
+        self.image_dir.mkdir(parents=True, exist_ok=True)
 
     async def initialize(self):
         """可选择实现异步的插件初始化方法，当实例化该插件类之后会自动调用该方法。"""
@@ -20,11 +31,11 @@ class MyPlugin(Star):
         """获取指令图片并发送"""
         user_name = event.get_sender_name()
         user_id = event.get_sender_id()
-        user_image_path = f"data/plugin_data/astrbot_plugin_instruction/image/{user_id}.png"
+        user_image_path = f"{self.image_dir}/{user_id}.png"
         if is_created_today(user_image_path):
             yield event.image_result(user_image_path)
         else:
-            create_instruction(username=user_name,output=user_image_path)
+            create_instruction(username=user_name,output=user_image_path,header_img_path=f"{self.plugin_dir}/logo.png",font_path=f"{self.font_dir}/LXGWWenKai-Regular.ttf")
             yield event.image_result(user_image_path)
 
     async def terminate(self):
@@ -36,7 +47,7 @@ def is_created_today(path: str) -> bool:
     if not file_path.exists():
         return False
     
-    ctime_timestamp = file_path.stat().st_ctime
+    ctime_timestamp = file_path.stat().st_birthtime 
     created_date = datetime.fromtimestamp(ctime_timestamp).date()
     return created_date == date.today()
 
@@ -188,11 +199,11 @@ def _char_glow_layer(width, height, chars_pos, color, font, blur_radius):
 
 
 def create_instruction(username, output="instruction.png",
-                         width=900, font_size=32, header_img_path="data/plugins/astrbot_plugin_instruction/logo.png"):
+                         width=900, font_size=32, header_img_path="data/plugins/astrbot_plugin_instruction/logo.png",font_path='./LXGWWenKai-Regular.ttf'):
     content = get_content()
     full_text = f"致{username}：{content}"
 
-    font = ImageFont.truetype('data/plugins/astrbot_plugin_instruction/LXGWWenKai-Regular.ttf', font_size)
+    font = ImageFont.truetype(font_path, font_size)
     pad_x, pad_x_top = 40, 40
     max_w = width - 2 * pad_x
 
@@ -272,7 +283,7 @@ def create_instruction(username, output="instruction.png",
         y = text_top + i * line_h
         _draw_bold(d, (x, y), line, font, (*BRIGHT_WHITE, 255))
 
-    base.convert('RGB').save(output, quality=95)
+    base.convert('RGB').save(output, quality=100)
     return output
 
 
