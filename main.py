@@ -31,12 +31,25 @@ class MyPlugin(Star):
         """获取指令图片并发送"""
         user_name = event.get_sender_name()
         user_id = event.get_sender_id()
-        user_image_path = f"{self.image_dir}/{user_id}.png"
+        group_id = event.get_group_id()
+        user_image_path = f"{self.image_dir}/{group_id}/{user_id}.png"
         if is_created_today(user_image_path):
             yield event.image_result(user_image_path)
         else:
             create_instruction(username=user_name,output=user_image_path,header_img_path=f"{self.plugin_dir}/logo.png",font_path=f"{self.font_dir}/LXGWWenKai-Regular.ttf")
             yield event.image_result(user_image_path)
+    
+    @filter.command("del_instruction")
+    async def get_instruction(self, event: AstrMessageEvent):
+        """删除今日指令图片"""
+        user_name = event.get_sender_name()
+        user_id = event.get_sender_id()
+        group_id = event.get_group_id()
+        user_image_path = f"{self.image_dir}/{group_id}/{user_id}.png"
+        file_path = Path(user_image_path)
+        if file_path.exists() and file_path.is_file():
+            file_path.unlink()
+        yield event.send("清理完成")
 
     async def terminate(self):
         """可选择实现异步的插件销毁方法，当插件被卸载/停用时会调用。"""
