@@ -33,6 +33,8 @@ class MyPlugin(Star):
         user_id = event.get_sender_id()
         group_id = event.get_group_id()
         user_image_path = f"{self.image_dir}/{group_id}/{user_id}.png"
+        if Path(f"{self.image_dir}/{group_id}").exists:
+            Path(f"{self.image_dir}/{group_id}").mkdir(parents=True)
         if is_created_today(user_image_path):
             yield event.image_result(user_image_path)
         else:
