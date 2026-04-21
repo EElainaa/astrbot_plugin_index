@@ -40,7 +40,7 @@ class MyPlugin(Star):
             yield event.image_result(user_image_path)
     
     @filter.command("del_instruction")
-    async def get_instruction(self, event: AstrMessageEvent):
+    async def del_instruction(self, event: AstrMessageEvent):
         """删除今日指令图片"""
         user_name = event.get_sender_name()
         user_id = event.get_sender_id()
