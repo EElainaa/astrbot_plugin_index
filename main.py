@@ -31,7 +31,7 @@ class MyPlugin(Star):
         user_id = event.get_sender_id()
         group_id = event.get_group_id()
         user_image_path = f"{self.image_dir}/{group_id}/{user_id}.png"
-        if not Path(f"{self.image_dir}/{group_id}").exists:
+        if not Path(f"{self.image_dir}/{group_id}").exists():
             logger.info(f"创建文件夹{self.image_dir}/{group_id}")
             Path(f"{self.image_dir}/{group_id}").mkdir(parents=True)
         if is_created_today(user_image_path):
