@@ -49,7 +49,7 @@ class MyPlugin(Star):
         file_path = Path(user_image_path)
         if file_path.exists() and file_path.is_file():
             file_path.unlink()
-        yield event.send("清理完成")
+        yield event.plain_result("清理完成")
 
     async def terminate(self):
         """可选择实现异步的插件销毁方法，当插件被卸载/停用时会调用。"""
