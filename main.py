@@ -33,7 +33,7 @@ class MyPlugin(Star):
         user_id = event.get_sender_id()
         group_id = event.get_group_id()
         user_image_path = f"{self.image_dir}/{group_id}/{user_id}.png"
-        if Path(f"{self.image_dir}/{group_id}").exists:
+        if not Path(f"{self.image_dir}/{group_id}").exists:
             Path(f"{self.image_dir}/{group_id}").mkdir(parents=True)
         if is_created_today(user_image_path):
             yield event.image_result(user_image_path)
@@ -44,7 +44,6 @@ class MyPlugin(Star):
     @filter.command("del_instruction")
     async def del_instruction(self, event: AstrMessageEvent):
         """删除今日指令图片"""
-        user_name = event.get_sender_name()
         user_id = event.get_sender_id()
         group_id = event.get_group_id()
         user_image_path = f"{self.image_dir}/{group_id}/{user_id}.png"
