@@ -7,7 +7,7 @@ import random
 import textwrap
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
-@register("astrbot_plugin_instruction", "指令之意", "获取每日的指令", "1.0")
+@register("astrbot_plugin_index", "指令之意", "获取每日的指令", "1.0")
 class MyPlugin(Star):
     def __init__(self, context: Context):
         super().__init__(context)
@@ -18,8 +18,6 @@ class MyPlugin(Star):
         self.res_dir = self.plugin_dir / "resource"
         self.font_dir = self.res_dir / "font"
         self.image_dir = self.plugin_data_dir / "image"
-        
-        # 创建必要目录（自动创建font文件夹）
         self.plugin_data_dir.mkdir(parents=True, exist_ok=True)
         self.image_dir.mkdir(parents=True, exist_ok=True)
 
@@ -34,6 +32,7 @@ class MyPlugin(Star):
         group_id = event.get_group_id()
         user_image_path = f"{self.image_dir}/{group_id}/{user_id}.png"
         if not Path(f"{self.image_dir}/{group_id}").exists:
+            logger.info(f"创建文件夹{self.image_dir}/{group_id}")
             Path(f"{self.image_dir}/{group_id}").mkdir(parents=True)
         if is_created_today(user_image_path):
             yield event.image_result(user_image_path)
