@@ -7,7 +7,7 @@ import random
 import textwrap
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
-@register("astrbot_plugin_index", "指令之意", "获取每日的指令", "1.0")
+@register("astrbot_plugin_index", "指令之意", "让你的Bot成为食指传令员", "1.0")
 class MyPlugin(Star):
     def __init__(self, context: Context):
         super().__init__(context)
@@ -21,10 +21,7 @@ class MyPlugin(Star):
         self.plugin_data_dir.mkdir(parents=True, exist_ok=True)
         self.image_dir.mkdir(parents=True, exist_ok=True)
 
-    async def initialize(self):
-        """可选择实现异步的插件初始化方法，当实例化该插件类之后会自动调用该方法。"""
-
-    @filter.command("instruction")
+    @filter.command("指令")
     async def get_instruction(self, event: AstrMessageEvent):
         """获取指令图片并发送"""
         user_name = event.get_sender_name()
@@ -40,9 +37,9 @@ class MyPlugin(Star):
             create_instruction(username=user_name,output=user_image_path,header_img_path=f"{self.plugin_dir}/logo.png",font_path=f"{self.font_dir}/LXGWWenKai-Regular.ttf")
             yield event.image_result(user_image_path)
     
-    @filter.command("del_instruction")
+    @filter.command("删除指令")
     async def del_instruction(self, event: AstrMessageEvent):
-        """删除今日指令图片"""
+        """删除此用户今日已生成的指令图片"""
         user_id = event.get_sender_id()
         group_id = event.get_group_id()
         user_image_path = f"{self.image_dir}/{group_id}/{user_id}.png"
@@ -50,9 +47,6 @@ class MyPlugin(Star):
         if file_path.exists() and file_path.is_file():
             file_path.unlink()
         yield event.plain_result("清理完成")
-
-    async def terminate(self):
-        """可选择实现异步的插件销毁方法，当插件被卸载/停用时会调用。"""
 
 def is_created_today(path: str) -> bool:
     file_path = Path(path)

@@ -1,6 +1,6 @@
 name: astrbot_plugin_index
 display_name: 指令之意
-desc: 获取每日的指令
+desc: 让你的Bot成为食指传令员
 version: v1.0
 author: EElainaya
 repo: https://github.com/EElainaa/astrbot_plugin_index

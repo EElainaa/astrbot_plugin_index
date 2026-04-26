@@ -1,7 +1,7 @@
 # astrbot-plugin-index
 
 指令之意
-每日获取不同的指令
+让你的Bot成为食指传令员
 
 # Supports
 
